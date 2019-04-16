@@ -200,42 +200,6 @@ class ReusableTextChooserBlock(SnippetChooserBlock):
         template = '_includes/snippets/reusable_text.html'
 
 
-class Link(blocks.StructBlock):
-    link_text = blocks.CharBlock(
-        required=True,
-        label='Text'
-    )
-    page_link = blocks.PageChooserBlock(
-        required=False,
-        help_text='Link to a page in Wagtail.',
-        label='Page'
-    )
-    external_link = blocks.CharBlock(
-        required=False,
-        max_length=1000,
-        label='Direct URL (rare)',
-        help_text='Enter url for page outside Wagtail. This will only '
-                  'be used if there is no page selected.'
-    )
-
-    def clean(self, value):
-        cleaned = super(Link, self).clean(value)
-
-        if not cleaned.get('page_link') and not cleaned.get('external_link'):
-            raise ValidationError(
-                'Validation error in link',
-                params={
-                    'page_link': [
-                        'Either page or external link is required.'
-                    ],
-                    'external_link': [
-                        'Either page or external link is required.'
-                    ]
-                }
-            )
-        return cleaned
-
-
 class NavItem(blocks.StructBlock):
     state = blocks.ChoiceBlock(choices=[
         ('both', 'Show always'),
@@ -244,10 +208,10 @@ class NavItem(blocks.StructBlock):
         default='both',
         help_text='Select state for this link. Test new links '
                   'by setting them to only show on Content.')
-    link = Link(required=False)
+    nav_link = atoms.Hyperlink()
     nav_items = blocks.ListBlock(
         blocks.StructBlock([
-            ('link', Link())
+            ('nav_link', atoms.Hyperlink())
         ]),
         label='Child items (mobile only)'
     )
@@ -298,6 +262,6 @@ class FeaturedMenuContent(blocks.StructBlock):
         help_text='If checked, this block will only show '
         'on our sharing site (Content).'
     )
-    link = Link(required=False, label="H4 link")
+    nav_link = atoms.Hyperlink(required=False)
     body = blocks.RichTextBlock(required=False)
     image = atoms.ImageBasic(required=False)

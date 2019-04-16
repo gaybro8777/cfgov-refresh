@@ -11,13 +11,11 @@
 
    value:                       Object defined from a StreamField block.
 
-   value.link:                  A link object, containing:
+   value.nav_link:              A link object, containing:
 
-   value.link.page_link:        A Wagtail page link.
+   value.nav_link.url:          Link URL.
 
-   value.link.external_link:    URL for page outside Wagtail.
-
-   value.link.link_text:        A string for the text of the link.
+   value.nav_link.text:         A string for the text of the link.
 
    value.body:                  Body text.
 
@@ -34,10 +32,10 @@
     {% set img_src = static(featured_image.url) if featured_image.url else '' %}
 
 {% endif %}
-{% if value.link %}
-    {% set link = value.link %}
-    {% set link_url = link.page_link.url if link.page_link else link.external_link %}
-    {% set link_text = link.link_text %}
+{% if value.nav_link %}
+    {% set link = value.nav_link %}
+    {% set link_url = link.url %}
+    {% set link_text = link.text %}
 {% endif %}
 
 <aside class="m-featured-menu-content">

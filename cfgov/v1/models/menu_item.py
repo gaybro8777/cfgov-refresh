@@ -16,19 +16,17 @@ from v1 import blocks as v1_blocks
 
 @python_2_unicode_compatible
 class MenuItem(models.Model):
-    link_text = models.CharField(
+    text = models.CharField(
         max_length=255,
         help_text='Display text for menu link',
         verbose_name="Menu label")
-
-    page_link = models.ForeignKey(
-        'wagtailcore.Page',
-        null=True,
-        blank=True,
-        related_name='+',
+    url = models.CharField(
+        default='#',
+        max_length=255,
         help_text=('Link to Wagtail overview page for this menu item '
                    '(leave blank if there is no overview page).'),
-        verbose_name='Overview page link'
+        verbose_name='Overview page link',
+        blank=True
     )
 
     order = models.PositiveSmallIntegerField(
@@ -66,8 +64,8 @@ class MenuItem(models.Model):
 
     panels = [
         MultiFieldPanel([
-            FieldPanel('link_text'),
-            PageChooserPanel('page_link'),
+            FieldPanel('text'),
+            FieldPanel('url'),
         ], heading='Menu Information'),
         FieldPanel('order'),
         StreamFieldPanel('column_1'),
@@ -81,7 +79,7 @@ class MenuItem(models.Model):
         ordering = ('order',)
 
     def __str__(self):
-        return self.link_text
+        return self.text
 
     def get_content(self, draft):
         """

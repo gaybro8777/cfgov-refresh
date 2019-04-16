@@ -160,7 +160,7 @@ class MegaMenuModelAdmin(ModelAdmin):
     model = MegaMenuItem
     menu_label = 'Mega Menu'
     menu_icon = 'cog'
-    list_display = ('link_text', 'order')
+    list_display = ('text', 'order')
 
 
 modeladmin_register(MegaMenuModelAdmin)

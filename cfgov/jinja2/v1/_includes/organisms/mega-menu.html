@@ -183,10 +183,10 @@
    ========================================================================== #}
 
 {% macro _nav_item( nav_depth, nav_item ) %}
-{% set link = nav_item.link if nav_item.link else nav_item %}
+{% set link = nav_item.nav_link if nav_item.nav_link else nav_item %}
 {% if link %}
-    {% set url = link.page_link.url if link.page_link else link.external_link | default('#') %}
-    {% set text = link.link_text %}
+    {% set url = link.url | default('#') %}
+    {% set text = link.text %}
     {% set has_children = nav_item.nav_groups | count > 0 or nav_item.nav_items | count > 0 %}
 
     <li class="m-list_item {{ _classes( nav_depth, '-item' ) }}"
