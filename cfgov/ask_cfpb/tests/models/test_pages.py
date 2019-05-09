@@ -27,7 +27,7 @@ from ask_cfpb.models.django import (
 )
 from ask_cfpb.models.pages import (
     PORTAL_CATEGORY_SORT_ORDER, REUSABLE_TEXT_TITLES, AnswerCategoryPage,
-    AnswerPage, PortalSearchPage, validate_page_number
+    AnswerLandingPage, AnswerPage, PortalSearchPage, validate_page_number
 )
 from ask_cfpb.scripts.export_ask_data import (
     assemble_output, clean_and_strip, export_questions
@@ -193,11 +193,12 @@ class PortalSearchPageTestCase(TestCase):
             new_page.save()
             new_page.save_revision(user=self.test_user).publish()
             return new_page
+        self.topic_1 = PortalTopic.objects.get(pk=1)
         self.ROOT_PAGE = HomePage.objects.get(slug='cfgov')
         self.test_user = User.objects.last()
         self.factory = RequestFactory()
         self.english_ask_parent = create_page(
-            SublandingPage,
+            AnswerLandingPage,
             'Ask CFPB',
             'ask-cfpb',
             self.ROOT_PAGE)
@@ -238,6 +239,14 @@ class PortalSearchPageTestCase(TestCase):
             self.spanish_portal,
             language='es',
             portal_topic_id=1)
+        self.answer_page = create_page(
+            AnswerPage,
+            'English test question-en-9999?',
+            'english_test-question-en-9999',
+            self.english_ask_parent,
+            language='en')
+        self.answer_page.portal_topic.add(self.topic_1)
+        self.answer_page.get_latest_revision().publish()
         self.answer_page_es = create_page(
             AnswerPage,
             'Spanish test question-es-9999?',
@@ -246,6 +255,24 @@ class PortalSearchPageTestCase(TestCase):
             language='es',
             primary_portal_topic_id=1,
         )
+
+    def test_ask_landing_page_get_cards_no_featured_answers(self):
+        self.english_search_page.get_latest_revision().publish()
+        landing_page = self.english_ask_parent
+        self.assertEqual(len(landing_page.get_portal_cards()), 0)
+
+    def test_ask_landing_page_get_cards(self):
+        self.answer_page.featured = True
+        self.answer_page.save_revision(user=self.test_user).publish()
+        landing_page = self.english_ask_parent
+        self.assertEqual(len(landing_page.get_portal_cards()), 1)
+
+    def test_ask_landing_page_get_cards_no_live_portal(self):
+        self.answer_page.featured = True
+        self.answer_page.save_revision(user=self.test_user).publish()
+        self.english_portal.unpublish()
+        landing_page = self.english_ask_parent
+        self.assertEqual(len(landing_page.get_portal_cards()), 1)
 
     def test_get_ask_breadcrumbs_with_portal(self):
         with override_settings(

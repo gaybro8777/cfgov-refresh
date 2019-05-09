@@ -1,7 +1,7 @@
 {% load accent_stripper %}
+{{ object.short_answer|striptags|safe }}
 {{ object.answer|striptags|safe }}
 {{ object.answer|striptags|stripaccents|safe }}
-{{ object.short_answer|striptags|safe }}
 {{ object.short_answer|striptags|stripaccents|safe }}
 {{ object.question }}
 {{ object.question|stripaccents }}

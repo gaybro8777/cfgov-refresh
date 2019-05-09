@@ -45,7 +45,8 @@
         <div class="page-links">
         {% for page in pages %}
         <article>
-            <div class="h3 hover"><a href="{{page.url}}" class="hover">{{page.autocomplete}}</a></div>
+                <div class="h3 hover"><a href="{{page.url}}">{{page.autocomplete}}</a></div>
+                <p class="result-snippet">{{ page.text | truncate }}</p>
         </article>
         {% endfor %}
 
