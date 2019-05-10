@@ -41,7 +41,7 @@ class AnswerPageIndex(indexes.SearchIndex, indexes.Indexable):
         return [topic.heading for topic in obj.portal_category.all()]
 
     def prepare_preview(self, obj):
-        full_text = strip_tags(obj.short_answer + obj.answer)
+        full_text = strip_tags(" ".join([obj.short_answer, obj.answer]))
         return Truncator(full_text).words(40, truncate=' ...')
 
     def prepare(self, obj):
