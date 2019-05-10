@@ -6,6 +6,17 @@ from ask_cfpb.models.pages import AnswerPage
 from search import fields
 
 
+def truncatissimo(text):
+    """Limit preview text to 40 words AND to 255 characters."""
+    word_limit = 40
+    while word_limit:
+        test = Truncator(text).words(word_limit, truncate=' ...')
+        if len(test) <= 255:
+            return test
+        else:
+            word_limit -= 1
+
+
 class AnswerPageIndex(indexes.SearchIndex, indexes.Indexable):
     text = fields.CharFieldWithSynonyms(
         document=True,
@@ -42,7 +53,7 @@ class AnswerPageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_preview(self, obj):
         full_text = strip_tags(" ".join([obj.short_answer, obj.answer]))
-        return Truncator(full_text).words(40, truncate=' ...')
+        return truncatissimo(full_text)
 
     def prepare(self, obj):
         data = super(AnswerPageIndex, self).prepare(obj)
