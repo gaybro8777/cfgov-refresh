@@ -1,3 +1,5 @@
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 from haystack import indexes
 
 from ask_cfpb.models.pages import AnswerPage
@@ -21,6 +23,7 @@ class AnswerPageIndex(indexes.SearchIndex, indexes.Indexable):
     portal_topics = indexes.MultiValueField()
     portal_categories = indexes.MultiValueField()
     suggestions = indexes.FacetCharField()
+    preview = indexes.CharField(indexed=False)
 
     def prepare_answer(self, obj):
         data = super(AnswerPageIndex, self).prepare(obj)
@@ -36,6 +39,10 @@ class AnswerPageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_portal_categories(self, obj):
         return [topic.heading for topic in obj.portal_category.all()]
+
+    def prepare_preview(self, obj):
+        full_text = strip_tags(obj.short_answer + obj.answer)
+        return Truncator(full_text).words(40, truncate=' ...')
 
     def prepare(self, obj):
         data = super(AnswerPageIndex, self).prepare(obj)
