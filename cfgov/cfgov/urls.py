@@ -21,8 +21,7 @@ from wagtailautocomplete.urls.admin import (
 )
 
 from ask_cfpb.views import (
-    ask_autocomplete, ask_search, print_answer, redirect_ask_search,
-    view_answer
+    ask_autocomplete, ask_search, redirect_ask_search, view_answer
 )
 from core.conditional_urls import include_if_app_enabled
 from core.views import (
@@ -128,9 +127,6 @@ urlpatterns = [
         template_name='fair-lending/index.html'),
         name='fair-lending'),
 
-    url(r'^practitioner-resources/students/$', TemplateView.as_view(
-        template_name='students/index.html'),
-        name='students'),
     url(r'^practitioner-resources/students/knowbeforeyouowe/$',
         TemplateView.as_view(
             template_name='students/knowbeforeyouowe/index.html'),
@@ -346,8 +342,8 @@ urlpatterns = [
         view_answer,
         name='ask-spanish-answer'),
     url(r'^es/obtener-respuestas/([-\w]{1,244})-(es)-(\d{1,6})/imprimir/$',
-        print_answer,
-        name='ask-spanish-print-answer'),
+        view_answer,
+        name='ask-spanish-answer'),
     url(r'^(?i)ask-cfpb/search/$',
         ask_search,
         name='ask-search-en'),
@@ -413,13 +409,6 @@ urlpatterns = [
 
     # Temporary: HMDA Legacy pages
     # Will be deleted when HMDA API is retired (hopefully Summer 2019)
-    url(r'data-research/hmda-new/explore$',
-        FlaggedTemplateView.as_view(
-            flag_name='HMDA_LEGACY_REVIEW',
-            template_name='hmda/orange-explorer.html'
-        ),
-        name='legacy_explorer_draft'
-    ),
     url(r'data-research/hmda/explore$',
         FlaggedTemplateView.as_view(
             flag_name='HMDA_LEGACY_PUBLISH',
@@ -429,6 +418,99 @@ urlpatterns = [
     ),
 
 ]
+
+# Ask CFPB category and subcategory redirects
+category_redirects = [
+    url(r'^ask-cfpb/category-auto-loans/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/auto-loans/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-bank-accounts-and-services/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/bank-accounts/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-credit-cards/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/credit-cards/answers/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-credit-reporting/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/credit-reports-and-scores/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-debt-collection/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/debt-collection/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-families-money/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/money-as-you-grow/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-money-transfers/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/money-transfers/answers/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-mortgages/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/mortgages/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-payday-loans/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/payday-loans/answers',
+            permanent=True)),
+    url(r'^ask-cfpb/category-prepaid-cards/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/prepaid-cards/',
+            permanent=True)),
+    url(r'^ask-cfpb/category-student-loans/(.*)$',
+        RedirectView.as_view(
+            url='/consumer-tools/student-loans/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-comprar-un-vehiculo/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/prestamos-para-vehiculos/respuestas/',  # noqa: E501
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-manejar-una-cuenta-bancaria/(.*)$',  # noqa: E501
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/cuentas-bancarias/respuestas/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-obtener-una-tarjeta-de-credito/(.*)$',  # noqa: E501
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/tarjetas-de-credito/respuestas/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-adquirir-credito/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/informes-y-puntajes-de-credito/respuestas/',  # noqa: E501
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-manejar-una-deuda/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/cobro-de-deudas/respuestas/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-ensenar-a-otros/(.*)$',
+        RedirectView.as_view(
+            url='/es/el-dinero-mientras-creces/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-enviar-dinero/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/transferencias-de-dinero/respuestas/',  # noqa: E501
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-comprar-una-casa/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/hipotecas/respuestas/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-prestamos-de-dia-de-pago/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/prestamos-del-dia-de-pago/respuestas/',  # noqa: E501
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-escoger-una-tarjeta-prepagada/(.*)$',  # noqa: E501
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/tarjetas-prepagadas/respuestas/',
+            permanent=True)),
+    url(r'^es/obtener-respuestas/categoria-pagar-la-universidad/(.*)$',
+        RedirectView.as_view(
+            url='/es/obtener-respuestas/prestamos-estudiantiles/respuestas/',  # noqa: E501
+            permanent=True))
+]
+urlpatterns = urlpatterns + category_redirects
 
 if settings.ALLOW_ADMIN_URL:
     patterns = [

@@ -217,7 +217,6 @@ def page_type_choices():
             ('raj-date', 'Raj Date'),
             ('elizabeth-warren', 'Elizabeth Warren'))),
         ('Newsroom', (
-            ('blog', 'Blog'),
             ('op-ed', 'Op-ed'),
             ('press-release', 'Press release'),
             ('directors-notebook', "Director's notebook"),
@@ -260,6 +259,11 @@ def is_blog(page):
             if category.name == choice[0]:
                 return True
     if 'Blog' in page.specific_class.__name__:
+        return True
+
+
+def is_event(page):
+    if 'Event' in page.specific_class.__name__:
         return True
 
 
