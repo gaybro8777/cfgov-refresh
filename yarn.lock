@@ -4513,6 +4513,11 @@ highcharts@7.0.0:
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-7.0.0.tgz#07b3d9a23715088a48965f6fae080bc9c20c01dd"
   integrity sha512-QftoYYE37lURgKT2FAFdze0W7RPDDWLRs1AgFADjz2zAc8SSPFuFNLkifxHAlVvRyTU/09Q1bk2uX1WPxNX3Eg==
 
+highcharts@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-9.0.0.tgz#2e5d382481f71c50ac7f086e7bdead394fab71d4"
+  integrity sha512-MJCtidFytGSQvsV3OEM+vFTLpjUcp7jmFpLn8h3oL4WKp0gxUOQg6Nw00sqMWGdiadst0gOZO4804zynTcYjZQ==
+
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
