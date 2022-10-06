@@ -84,7 +84,7 @@
     "protractor-retry": "1.2.8",
     "sauce-connect-tunnel": "0.2.1",
     "selenium-webdriver": "4.0.0-alpha.1",
-    "snyk": "1.161.1",
+    "snyk": "1.996.0",
     "through2": "3.0.1",
     "wcag": "0.3.0"
   },
